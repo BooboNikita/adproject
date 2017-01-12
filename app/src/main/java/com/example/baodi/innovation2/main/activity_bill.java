@@ -457,7 +457,7 @@ public class activity_bill extends AppCompatActivity implements NavigationView.O
             Intent intent=new Intent(this,markdown_instruction.class);
             startActivity(intent);
         }
-        else if(id==R.id.activityLogin){
+        else if(id==R.id.signout){
             Intent intent=new Intent(this,LoginActivity.class);
             startActivity(intent);
         }

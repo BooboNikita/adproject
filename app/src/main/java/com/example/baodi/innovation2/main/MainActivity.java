@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,10 +34,20 @@ public class MainActivity extends AppCompatActivity
     private long countDownTime = 0;
     private boolean failed = false;
     private boolean counting = false;
+    LoginActivity loginActivity;
+    String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        username=loginActivity.userNameValue;
+        LayoutInflater inflater=getLayoutInflater();
+        View view=inflater.inflate(R.layout.nav_header_main,null);
+        TextView user=(TextView) view.findViewById(R.id.username);
+//        user.setText(username);
+        Log.v(user.getText().toString(),"tostring");
+        user.setText(username);
+        Log.v(user.getText().toString(),"tostring"+username);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final TextView time_remaining = (TextView) findViewById(R.id.countDownTimer);
@@ -268,7 +280,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent=new Intent(this,markdown_instruction.class);
             startActivity(intent);
         }
-        else if(id==R.id.activityLogin){
+        else if(id==R.id.signout){
             Intent intent=new Intent(this,LoginActivity.class);
             startActivity(intent);
         }

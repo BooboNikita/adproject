@@ -57,11 +57,14 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
     List<Map<String,Object>> data=new ArrayList<>();
     SimpleAdapter adapter;
     String name;
+    LoginActivity loginActivity;
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scanlist_navidrawer);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +73,8 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
                 startActivity(intent);
             }
         });
+        username=loginActivity.userNameValue;
+        Log.v(username,"username");
         listView=(ListView) findViewById(R.id.scan_list);
         adapter=new SimpleAdapter(getApplicationContext(),data,R.layout.scan_listitem,new String[]{"name","date"},
                 new int[]{R.id.dairy_filename,R.id.file_time});
@@ -209,7 +214,7 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
                 @Override
                 public void run() {
                     try {
-                        printList();
+                        printList(username);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -258,7 +263,7 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
         super.onResume();
     }
 
-    private void printList() throws IOException {
+    private void printList(String username) throws IOException {
         HttpURLConnection connection = null;
         try {
             URL url = new URL(urlString);
@@ -269,12 +274,12 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
             connection.setDoInput(true);
             connection.setDoOutput(true);
 
-//            DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+            DataOutputStream out = new DataOutputStream(connection.getOutputStream());
 
 //            String name="asd";
 //            Log.v(name,"name");
 //            name= URLEncoder.encode(name,"utf-8");
-//            out.writeBytes("name="+name);
+            out.writeBytes("username="+username);
             InputStream in=connection.getInputStream();
             BufferedReader reader=new BufferedReader(new InputStreamReader(in));
             StringBuilder stringBuilder=new StringBuilder();
@@ -336,7 +341,7 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
 //            String name="asd";
             Log.v(name,"name");
             name= URLEncoder.encode(name,"utf-8");
-            out.writeBytes("name="+name);
+            out.writeBytes("name="+name+"&username="+username);
             InputStream in=connection.getInputStream();
             BufferedReader reader=new BufferedReader(new InputStreamReader(in));
             StringBuilder stringBuilder=new StringBuilder();
@@ -383,10 +388,11 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
             Intent intent=new Intent(this,markdown_instruction.class);
             startActivity(intent);
         }
-        else if(id==R.id.activityLogin){
+        else if(id==R.id.signout){
             Intent intent=new Intent(this,LoginActivity.class);
             startActivity(intent);
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

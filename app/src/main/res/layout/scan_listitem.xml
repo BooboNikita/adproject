@@ -23,6 +23,9 @@
             android:layout_marginLeft="30dp"
             android:textColor="@color/black"
             android:id="@+id/file_time"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

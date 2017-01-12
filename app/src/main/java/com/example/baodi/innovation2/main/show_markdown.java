@@ -47,12 +47,15 @@ public class show_markdown extends AppCompatActivity {
     String str;
     private static final int UPDATE_CONTENT=0;
     String urlString="http://101.200.59.74:8080/androidpro/deleteSQL";
+    LoginActivity loginActivity;
+    String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_markdown);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         name=getIntent().getStringExtra("name");
+        username=loginActivity.userNameValue;
         textView=(TextView) findViewById(R.id.markdown_content);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         try {
@@ -204,7 +207,7 @@ public class show_markdown extends AppCompatActivity {
 //            String name="asd";
             Log.v(name,"name");
             name= URLEncoder.encode(name,"utf-8");
-            out.writeBytes("name="+name);
+            out.writeBytes("name="+name+"&username="+username);
             InputStream in=connection.getInputStream();
             BufferedReader reader=new BufferedReader(new InputStreamReader(in));
             StringBuilder stringBuilder=new StringBuilder();

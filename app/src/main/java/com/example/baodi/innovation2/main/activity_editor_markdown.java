@@ -56,6 +56,8 @@ public class activity_editor_markdown extends AppCompatActivity {
     private static final String IMAGE_UNSPECIFIED = "image/*";
     private final int IMAGE_CODE = 0;
     String str;
+    LoginActivity loginActivity;
+    String username;
     String urlString="http://101.200.59.74:8080/androidpro/findExistedFile";
     String urlString2="http://101.200.59.74:8080/androidpro/insertNewFile";
     private static final int UPDATE_CONTENT=0;
@@ -70,9 +72,14 @@ public class activity_editor_markdown extends AppCompatActivity {
         clear_button=(Button) findViewById(R.id.clear_button);
         actionBar.setDisplayHomeAsUpEnabled(true);
         name=getIntent().getStringExtra("name");
+        Log.v(name,"name123");
+        username=loginActivity.userNameValue;
+        Log.v(username,"usernameasdasdas");
         if(name!=null){
             try {
-                FileInputStream fileInput = openFileInput(name);
+                String newPath = URLEncoder.encode(name, "utf-8");
+                FileInputStream fileInput = openFileInput(newPath);
+                Log.v(newPath,"url");
                 byte[] contents = new byte[fileInput.available()];
                 fileInput.read(contents);
                 editText.setText(new String(contents));
@@ -217,7 +224,7 @@ public class activity_editor_markdown extends AppCompatActivity {
 //            String name="asd";
             Log.v(name,"name");
             name= URLEncoder.encode(name,"utf-8");
-            out.writeBytes("name="+name);
+            out.writeBytes("name="+name+"&username="+username);
             InputStream in=connection.getInputStream();
             BufferedReader reader=new BufferedReader(new InputStreamReader(in));
             StringBuilder stringBuilder=new StringBuilder();
@@ -256,7 +263,8 @@ public class activity_editor_markdown extends AppCompatActivity {
 
             DataOutputStream out = new DataOutputStream(connection.getOutputStream());
             name= URLEncoder.encode(name,"utf-8");
-            out.writeBytes("name="+name);
+            out.writeBytes("name="+name+"&username="+username);
+            Log.v(username,"username123");
             InputStream in=connection.getInputStream();
             BufferedReader reader=new BufferedReader(new InputStreamReader(in));
             StringBuilder stringBuilder=new StringBuilder();

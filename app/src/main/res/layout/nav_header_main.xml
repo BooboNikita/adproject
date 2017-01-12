@@ -25,12 +25,9 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="掌控人生，为您加分！！"
         android:textSize="20sp"
+        android:id="@+id/username"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="数据学院移动应用开发57组" />
+
 
 </LinearLayout>
