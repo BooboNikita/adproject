@@ -3,7 +3,7 @@ package com.example.baodi.innovation2.parser;
 import android.text.SpannableStringBuilder;
 
 /**
- * Created by zhou on 16-6-28.
+
  * 代表每一行文本
  */
 public class Line {

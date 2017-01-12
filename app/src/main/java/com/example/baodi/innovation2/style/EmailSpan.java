@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 
 /**
- * Created by zhou on 16-7-30.
  * EmailSpan
  */
 public class EmailSpan extends URLSpan {

@@ -7,7 +7,6 @@ import android.text.style.LineHeightSpan;
 import android.text.style.ReplacementSpan;
 
 /**
- * Created by zhou on 16-7-2.
  */
 public class UnderLineSpan extends ReplacementSpan implements LineHeightSpan {
 

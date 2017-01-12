@@ -10,7 +10,6 @@ import android.text.style.ReplacementSpan;
 import com.example.baodi.innovation2.util.NumberKit;
 
 /**
- * Created by zhou on 16-7-3.
  * 列表Span
  */
 public class MarkDownInnerBulletSpan extends ReplacementSpan {

@@ -16,7 +16,6 @@ import com.example.baodi.innovation2.util.NumberKit;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by zhou on 16-6-25.
  * 列表Span
  */
 public class MarkDownBulletSpan extends BulletSpan {

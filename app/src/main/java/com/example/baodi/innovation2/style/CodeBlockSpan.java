@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ *
  * 代码块Span
  */
 public class CodeBlockSpan extends ReplacementSpan implements LineHeightSpan {

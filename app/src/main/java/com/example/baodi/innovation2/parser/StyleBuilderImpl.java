@@ -27,7 +27,6 @@ import com.example.baodi.innovation2.style.UnderLineSpan;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by zhou on 16-6-28.
  * StyleBuilderImpl
  */
 public class StyleBuilderImpl implements StyleBuilder {

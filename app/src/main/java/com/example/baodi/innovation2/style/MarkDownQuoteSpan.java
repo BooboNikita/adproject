@@ -7,7 +7,6 @@ import android.text.Layout;
 import android.text.style.QuoteSpan;
 
 /**
- * Created by zhou on 16-6-25.
  * 引用Span
  */
 public class MarkDownQuoteSpan extends QuoteSpan {

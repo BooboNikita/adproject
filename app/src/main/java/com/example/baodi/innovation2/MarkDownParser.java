@@ -23,7 +23,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by zhou on 16-6-25.
  */
 class MarkDownParser {
 

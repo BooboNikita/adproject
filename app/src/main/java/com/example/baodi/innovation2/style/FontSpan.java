@@ -7,7 +7,6 @@ import android.text.TextPaint;
 import android.text.style.StyleSpan;
 
 /**
- * Created by zhou on 2016/11/10.
  * FontSpan
  */
 public class FontSpan extends StyleSpan implements ParcelableSpan {
