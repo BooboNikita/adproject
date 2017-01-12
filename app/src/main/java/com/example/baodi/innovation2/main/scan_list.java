@@ -74,7 +74,7 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
             }
         });
         username=loginActivity.userNameValue;
-        Log.v(username,"username");
+        Log.v(username,"username1");
         listView=(ListView) findViewById(R.id.scan_list);
         adapter=new SimpleAdapter(getApplicationContext(),data,R.layout.scan_listitem,new String[]{"name","date"},
                 new int[]{R.id.dairy_filename,R.id.file_time});
