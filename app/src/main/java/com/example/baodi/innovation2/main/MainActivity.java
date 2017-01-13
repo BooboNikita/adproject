@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -165,8 +166,10 @@ public class MainActivity extends AppCompatActivity
                 Log.i("CountDown:", "time remaining: " + millisUntilFinished / 1000);
                 setTime(millisUntilFinished / 1000);
                 isBackground(getApplicationContext());
+                View time_tree_layout = (View) findViewById(R.id.time_tree_background);
                 if(isBackground(getApplicationContext())){
                     failed = true;
+                    time_tree_layout.setBackgroundResource(R.mipmap.tree_back_black);
                     counting = false;
                     TextView time_remaining = (TextView) findViewById(R.id.countDownTimer);
                     Button restart = (Button) findViewById(R.id.start);
@@ -180,6 +183,8 @@ public class MainActivity extends AppCompatActivity
             public void onFinish() {
                 TextView time_remaining = (TextView) findViewById(R.id.countDownTimer);
                 time_remaining.setText("成功啦！");
+                View time_tree_layout = (View) findViewById(R.id.time_tree_background);
+                time_tree_layout.setBackgroundResource(R.mipmap.tree_back);
                 counting = false;
             }
         };
