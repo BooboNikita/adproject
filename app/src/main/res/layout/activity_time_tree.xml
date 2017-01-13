@@ -29,6 +29,8 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="com.example.time_tree.Time_tree"
+        android:background="@mipmap/tree_back"
+        android:id="@+id/time_tree_background"
         android:orientation="vertical">
 
 
