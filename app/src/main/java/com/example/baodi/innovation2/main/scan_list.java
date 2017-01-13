@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.example.baodi.innovation2.R;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -158,8 +159,14 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Map<String,Object> tmp= (Map<String, Object>) adapterView.getItemAtPosition(i);
                 String name=tmp.get("name").toString();
+                Bitmap img=(Bitmap)tmp.get("img");
                 Intent intent=new Intent(scan_list.this,show_markdown.class);
                 intent.putExtra("name",name);
+//                intent.putExtra("img",img);
+//                ByteArrayOutputStream baos=new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//                byte [] bitmapByte =baos.toByteArray();
+//                intent.putExtra("img", bitmapByte);
                 startActivity(intent);
             }
         });

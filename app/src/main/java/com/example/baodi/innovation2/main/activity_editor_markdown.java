@@ -7,13 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Message;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.provider.MediaStore;
@@ -68,6 +73,7 @@ public class activity_editor_markdown extends AppCompatActivity {
     private static final int INSERT_PIC=2;
     private final int GET_PHOTO_BY_CAMERA = 100;
     private final int GET_PHOTO_BY_GALLERY = 200;
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +84,11 @@ public class activity_editor_markdown extends AppCompatActivity {
         clear_button=(Button) findViewById(R.id.clear_button);
         actionBar.setDisplayHomeAsUpEnabled(true);
         name=getIntent().getStringExtra("name");
+//        byte [] bis=getIntent().getByteArrayExtra("img");
+//        Bitmap img= BitmapFactory.decodeByteArray(bis, 0, bis.length);
+        LinearLayout linearLayout=(LinearLayout) findViewById(R.id.activity_editor_markdown);
+//        linearLayout.setBackground(new BitmapDrawable(getResources(),img));
+        linearLayout.getBackground().setAlpha(40);
         Log.v(name,"name123");
         username=loginActivity.userNameValue;
         Log.v(username,"usernameasdasdas");
