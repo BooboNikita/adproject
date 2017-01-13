@@ -57,7 +57,7 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
 
     String str;
     Handler handler;
-    String urlString="http://172.18.57.205:8080/SQLserver/findSQL";
+    String urlString="http://101.200.59.74:8080/androidpro/findSQL";
     String urlString2="http://101.200.59.74:8080/androidpro/deleteSQL";
     private static final int UPDATE_CONTENT=0;
     private static final int DELETE_CONTENT=1;
@@ -116,7 +116,7 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
                         for(int i=0;i<content.length&&content.length>2;i+=4,num++){
                             Map<String ,Object> tmp=new HashMap<>();
                             bitmap=null;
-                            returnBitMap(num,"http://172.18.57.205:8080/SQLserver/file/"+content[i+3]);
+                            returnBitMap(num,"http://101.200.59.74:8080/androidpro/file/"+content[i+3]);
                             tmp.put("name",content[i]);
                             tmp.put("date",content[i+2]);
                             Log.v(content[i+3],"content4");
@@ -322,7 +322,7 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
                             for(int i=0;i<content.length&&content.length>2;i+=4,num++){
                                 Map<String ,Object> tmp=new HashMap<>();
 //                                bitmap=BitmapFactory.decodeResource(getResources(),R.mipmap.beijing);
-                                returnBitMap(num,"http://172.18.57.205:8080/SQLserver/file/"+content[i+3]);
+                                returnBitMap(num,"http://101.200.59.74:8080/androidpro/file/"+content[i+3]);
                                 tmp.put("name",content[i]);
                                 tmp.put("date",content[i+2]);
                                 Log.v(content[i+3],"content4");

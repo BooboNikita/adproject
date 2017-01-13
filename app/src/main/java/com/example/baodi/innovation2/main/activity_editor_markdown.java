@@ -61,8 +61,8 @@ public class activity_editor_markdown extends AppCompatActivity {
     LoginActivity loginActivity;
     String username;
     String urlString="http://101.200.59.74:8080/androidpro/findExistedFile";
-    String urlString2="http://172.18.57.205:8080/SQLserver/insertNewFile";
-    String urlString3="http://172.18.57.205:8080/SQLserver/recieveImage";
+    String urlString2="http://101.200.59.74:8080/androidpro/insertNewFile";
+    String urlString3="http://101.200.59.74:8080/androidpro/recieveImage";
     private static final int UPDATE_CONTENT=0;
     private static final int INSERT_CONTENT=1;
     private static final int INSERT_PIC=2;
@@ -132,7 +132,7 @@ public class activity_editor_markdown extends AppCompatActivity {
                     case INSERT_PIC:
                         Log.v(msg.obj.toString(),"obj");
                         if(msg.obj.equals("0")){
-                            Toast.makeText(getApplicationContext(),"上传成功",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"封面上传成功",Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Toast.makeText(getApplicationContext(),"上传失败",Toast.LENGTH_SHORT).show();
@@ -316,33 +316,38 @@ public class activity_editor_markdown extends AppCompatActivity {
     }
     private void setImage() {
         final CharSequence[] items = { "本地上传"};
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("选择上传方式")
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        if (item == 0) {
+        if(name!=null){
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("上传封面图片")
+                    .setItems(items, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+                            if (item == 0) {
 //                            Log.v(TAG, "本地上传 ");
-                            Intent intent = new Intent();
-                            intent.setType("image/*");
-                            intent.setAction(Intent.ACTION_PICK);
-                            startActivityForResult(intent,
-                                    GET_PHOTO_BY_GALLERY);
-                            dialog.cancel();
-                        } else if (item == 1) {
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_PICK);
+                                startActivityForResult(intent,
+                                        GET_PHOTO_BY_GALLERY);
+                                dialog.cancel();
+                            } else if (item == 1) {
 
 //                            Log.v(TAG, "拍照上传 ");
 
-                            Intent intent = new Intent(
-                                    "android.media.action.IMAGE_CAPTURE");
+                                Intent intent = new Intent(
+                                        "android.media.action.IMAGE_CAPTURE");
 
-                            startActivityForResult(intent,
-                                    GET_PHOTO_BY_CAMERA);
+                                startActivityForResult(intent,
+                                        GET_PHOTO_BY_CAMERA);
 
-                            dialog.cancel();
+                                dialog.cancel();
+                            }
                         }
-                    }
-                }).create();
-        dialog.show();
+                    }).create();
+            dialog.show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(),"请先保存，重新进入后上传图片",Toast.LENGTH_SHORT).show();
+        }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
