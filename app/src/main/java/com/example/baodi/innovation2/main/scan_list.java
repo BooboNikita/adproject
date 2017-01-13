@@ -61,6 +61,7 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
     String urlString2="http://101.200.59.74:8080/androidpro/deleteSQL";
     private static final int UPDATE_CONTENT=0;
     private static final int DELETE_CONTENT=1;
+    private static final int  UPDATE_PIC=2;
     ListView listView;
     List<Map<String,Object>> data=new ArrayList<>();
     SimpleAdapter adapter;
@@ -111,10 +112,11 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
                         Log.v((String)msg.obj,"123");
                         String content[]=((String) msg.obj).split(" ");
                         Log.v(String.valueOf(content.length),"sad");
-                        for(int i=0;i<content.length&&content.length>2;i+=4){
+                        int num=0;
+                        for(int i=0;i<content.length&&content.length>2;i+=4,num++){
                             Map<String ,Object> tmp=new HashMap<>();
                             bitmap=null;
-                            returnBitMap("http://172.18.57.205:8080/SQLserver/file/"+content[i+3]);
+                            returnBitMap(num,"http://172.18.57.205:8080/SQLserver/file/"+content[i+3]);
                             tmp.put("name",content[i]);
                             tmp.put("date",content[i+2]);
                             Log.v(content[i+3],"content4");
@@ -142,6 +144,9 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
 //                            tmp.put("date",content1[i+2]);
 //                            data.add(tmp);
 //                        }
+                        break;
+                    case UPDATE_PIC:
+                        data.get(msg.arg1).put("img",msg.obj);
                         break;
                     default:break;
                 }
@@ -199,32 +204,48 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-    public void returnBitMap(final String url) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                URL myFileUrl = null;
-                bitmap = null;
-                try {
-                    myFileUrl = new URL(url);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+    public void returnBitMap(final int i, final String url) {
+        ConnectivityManager connectivityManager=(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    URL myFileUrl = null;
+                    bitmap = null;
+                    try {
+                        myFileUrl = new URL(url);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        Log.e("error", "1");
+                    }
+                    try {
+                        HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
+                        conn.setReadTimeout(10000);
+                        conn.setConnectTimeout(15000);
+                        conn.setRequestMethod("POST");
+                        conn.setDoInput(true);
+                        conn.setDoOutput(true);
+                        Log.v(url, "url");
+                        InputStream is = conn.getInputStream();
+//                    InputStream is=new URL(url).openStream();
+                        bitmap = BitmapFactory.decodeStream(is);
+                        Message msg = new Message();
+                        msg.what = UPDATE_PIC;
+                        msg.obj = bitmap;
+                        msg.arg1 = i;
+                        handler.sendMessage(msg);
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.e("error", "2");
+                    }
                 }
-                try {
-                    HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
-                    conn.setDoInput(true);
-                    conn.setConnectTimeout(10000);
-                    conn.connect();
-                    InputStream is = conn.getInputStream();
-                    bitmap = BitmapFactory.decodeStream(is);
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-
+            }).start();
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"当前没有可用网络！",Toast.LENGTH_SHORT).show();
+        }
 //        return bitmap;
     }
     @Override
@@ -297,10 +318,11 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
                             String content[]=((String) msg.obj).split(" ");
                             Log.v(String.valueOf(content.length),"sad");
                             Log.v(content[0],"asd");
-                            for(int i=0;i<content.length&&content.length>2;i+=4){
+                            int num=0;
+                            for(int i=0;i<content.length&&content.length>2;i+=4,num++){
                                 Map<String ,Object> tmp=new HashMap<>();
-                                bitmap=null;
-                                returnBitMap("http://172.18.57.205:8080/SQLserver/file/"+content[i+3]);
+//                                bitmap=BitmapFactory.decodeResource(getResources(),R.mipmap.beijing);
+                                returnBitMap(num,"http://172.18.57.205:8080/SQLserver/file/"+content[i+3]);
                                 tmp.put("name",content[i]);
                                 tmp.put("date",content[i+2]);
                                 Log.v(content[i+3],"content4");
@@ -309,6 +331,9 @@ public class scan_list extends AppCompatActivity implements NavigationView.OnNav
                             }
 
                         }
+                        break;
+                    case UPDATE_PIC:
+                        data.get(msg.arg1).put("img",msg.obj);
                         break;
 
                     default:break;
