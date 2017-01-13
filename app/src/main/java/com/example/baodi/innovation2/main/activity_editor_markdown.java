@@ -35,12 +35,14 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.Buffer;
@@ -59,9 +61,13 @@ public class activity_editor_markdown extends AppCompatActivity {
     LoginActivity loginActivity;
     String username;
     String urlString="http://101.200.59.74:8080/androidpro/findExistedFile";
-    String urlString2="http://101.200.59.74:8080/androidpro/insertNewFile";
+    String urlString2="http://172.18.57.205:8080/SQLserver/insertNewFile";
+    String urlString3="http://172.18.57.205:8080/SQLserver/recieveImage";
     private static final int UPDATE_CONTENT=0;
     private static final int INSERT_CONTENT=1;
+    private static final int INSERT_PIC=2;
+    private final int GET_PHOTO_BY_CAMERA = 100;
+    private final int GET_PHOTO_BY_GALLERY = 200;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +128,15 @@ public class activity_editor_markdown extends AppCompatActivity {
                         break;
                     case INSERT_CONTENT:
                         Log.v(str,"234");
+                        break;
+                    case INSERT_PIC:
+                        Log.v(msg.obj.toString(),"obj");
+                        if(msg.obj.equals("0")){
+                            Toast.makeText(getApplicationContext(),"上传成功",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"上传失败",Toast.LENGTH_SHORT).show();
+                        }
                         break;
                 }
             }
@@ -300,45 +315,105 @@ public class activity_editor_markdown extends AppCompatActivity {
         return false;
     }
     private void setImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK, null);
-        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_UNSPECIFIED);
-        startActivityForResult(intent, IMAGE_CODE);
+        final CharSequence[] items = { "本地上传"};
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("选择上传方式")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (item == 0) {
+//                            Log.v(TAG, "本地上传 ");
+                            Intent intent = new Intent();
+                            intent.setType("image/*");
+                            intent.setAction(Intent.ACTION_PICK);
+                            startActivityForResult(intent,
+                                    GET_PHOTO_BY_GALLERY);
+                            dialog.cancel();
+                        } else if (item == 1) {
+
+//                            Log.v(TAG, "拍照上传 ");
+
+                            Intent intent = new Intent(
+                                    "android.media.action.IMAGE_CAPTURE");
+
+                            startActivityForResult(intent,
+                                    GET_PHOTO_BY_CAMERA);
+
+                            dialog.cancel();
+                        }
+                    }
+                }).create();
+        dialog.show();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
 
 
-        Bitmap bm = null;
+        if (requestCode == GET_PHOTO_BY_GALLERY) {
+            Uri uri = data.getData();
+            Log.v("1", "uri: " + uri.toString());
 
-        ContentResolver resolver = getContentResolver();
+            String[] proj = { MediaStore.Images.Media.DATA };
+            Cursor cursor = managedQuery(uri, proj, null, null, null);
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            Log.v(path, "path: " + path);
+            connect_pic(path);
+            ContentResolver cr = getContentResolver();
+//            try {
+//                mBitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+//            } catch (FileNotFoundException e) {
+//
+//                e.printStackTrace();
+//            }
 
-        if (requestCode == IMAGE_CODE) {
+        } else if (requestCode == GET_PHOTO_BY_CAMERA) {
+            Bundle bundle = data.getExtras();
+//            mBitmap = (Bitmap) bundle.get("data");
+            //对于使用相机上传，我这里目前只能获取到Bitmap，无法获取到URL，欢迎交流
 
-            try {
-
-                Uri originalUri = data.getData();
-
-                bm = MediaStore.Images.Media.getBitmap(resolver, originalUri);
-                String[] proj = { MediaStore.Images.Media.DATA };
-                Cursor cursor = managedQuery(originalUri, proj, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                image_path = cursor.getString(column_index);
-                String text=editText.getText().toString();
-                text+="![]("+image_path+")";
-                Log.v(text,"text");
-                editText.setText(text);
-            } catch (IOException e) {
-                Log.e("TAG-->Error", e.toString());
-            }
-
-            finally {
-                return;
-            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+    public void connect_pic(final String name){
+        ConnectivityManager connectivityManager=(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected()){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        insertpic(name);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"当前没有可用网络！",Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void insertpic(String picnname) throws IOException {
+        HttpURLConnection connection = null;
+        try {
+            File file=new File(picnname);
+            UploadUtil uploadUtil=new UploadUtil();
+            String re=uploadUtil.uploadFile(file,urlString3,name,username);
+            Message message=new Message();
+            message.what=INSERT_PIC;
+            message.obj=re;
+            handler.sendMessage(message);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
