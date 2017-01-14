@@ -54,7 +54,9 @@ public class LoginActivity extends Activity {
     static public String userNameValue=new String();
     String passwordValue;
     String urlString="http://101.200.59.74:8080/androidpro/login";
+    String urlString1="http://101.200.59.74:8080/androidpro/register";
     private static final int LOGIN_CONTENT=0;
+    private static final int REGISTER_CONTENT=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,9 +114,17 @@ public class LoginActivity extends Activity {
             public void onClick(View arg0) {
                 userNameValue = username.getText().toString();
                 passwordValue = userpassword.getText().toString();
-                Toast.makeText(LoginActivity.this, "注册成功！",
-                        Toast.LENGTH_SHORT).show();
-                connect(userNameValue,passwordValue);
+                if(userNameValue.equals("")||passwordValue.equals("")) {
+                    Toast.makeText(LoginActivity.this, "用户名或密码为空，请填写完整!",
+                            Toast.LENGTH_SHORT).show();
+                }
+//                else {
+//                    Toast.makeText(LoginActivity.this, "用户名或密码错误，请重新登录!",
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//                Toast.makeText(LoginActivity.this, "注册成功！",
+//                        Toast.LENGTH_SHORT).show();
+                else connect1(userNameValue,passwordValue);
             }
         });
         login.setOnClickListener(new OnClickListener() {
@@ -166,6 +176,18 @@ public class LoginActivity extends Activity {
                             }
                         }
                         break;
+                    case REGISTER_CONTENT:
+                        if (msg.obj.toString().equals("true")) {
+                            Toast.makeText(LoginActivity.this, "注册成功，现在可以登录了",
+                                    Toast.LENGTH_SHORT).show();
+                            //保存用户名和密码
+//                            editor.putString("USER_NAME", user
+
+                        } else {
+                            Toast.makeText(LoginActivity.this, "用户名重复,请重新填写",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -181,6 +203,25 @@ public class LoginActivity extends Activity {
                 public void run() {
                     try {
                         connectNetwork(name,password);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"当前没有可用网络！",Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void connect1(final String name, final String password){
+        ConnectivityManager connectivityManager=(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected()){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        register(name,password);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -217,6 +258,43 @@ public class LoginActivity extends Activity {
             in.close();
             Message message=new Message();
             message.what=LOGIN_CONTENT;
+            message.obj=str;
+            handler.sendMessage(message);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(connection==null){
+                connection.disconnect();
+            }
+        }
+    }
+    private void register(String name,String password) throws IOException {
+        HttpURLConnection connection = null;
+        try {
+            URL url = new URL(urlString1);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setReadTimeout(10000);
+            connection.setConnectTimeout(15000);
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+            Log.v(name,"name");
+            name= URLEncoder.encode(name,"utf-8");
+            out.writeBytes("username="+name+"&password="+password);
+            InputStream in=connection.getInputStream();
+            BufferedReader reader=new BufferedReader(new InputStreamReader(in));
+            StringBuilder stringBuilder=new StringBuilder();
+            String line;
+            while (((line=reader.readLine()))!=null){
+                stringBuilder.append(line);
+            }
+            str=stringBuilder.toString();
+            out.close();
+            in.close();
+            Message message=new Message();
+            message.what=REGISTER_CONTENT;
             message.obj=str;
             handler.sendMessage(message);
         }

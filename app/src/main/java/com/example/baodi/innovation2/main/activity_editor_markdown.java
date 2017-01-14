@@ -88,7 +88,6 @@ public class activity_editor_markdown extends AppCompatActivity {
 //        Bitmap img= BitmapFactory.decodeByteArray(bis, 0, bis.length);
         LinearLayout linearLayout=(LinearLayout) findViewById(R.id.activity_editor_markdown);
 //        linearLayout.setBackground(new BitmapDrawable(getResources(),img));
-        linearLayout.getBackground().setAlpha(40);
         Log.v(name,"name123");
         username=loginActivity.userNameValue;
         Log.v(username,"usernameasdasdas");
