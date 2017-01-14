@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.baodi.innovation2">
+
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/app_bg2"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".main.LoginActivity"
+            android:label="掌控人生">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".main.MainActivity"
+            android:label="Time tree"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".main.activity_editor_markdown"
+            android:label="edit"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".main.scan_list"
+            android:label="My list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".main.show_markdown" />
+        <activity android:name=".main.markdown_instruction" />
+        <activity android:name=".main.pickpicture"></activity>
+        <activity android:name=".main.activity_bill"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="My bill"></activity>
+        <activity android:name=".main.BillActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>

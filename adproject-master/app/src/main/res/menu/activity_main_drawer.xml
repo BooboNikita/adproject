@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/time_tree"
+            android:icon="@mipmap/time_tree"
+            android:title="时间树" />
+        <item
+            android:id="@+id/bill"
+            android:icon="@mipmap/bill"
+            android:title="我的账单" />
+        <item
+            android:id="@+id/nav_edit"
+            android:icon="@mipmap/edit_navi"
+            android:title="我的日记" />
+
+    </group>
+
+    <item android:title="Other">
+        <menu android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_instruction"
+                android:icon="@mipmap/ic_launcher"
+                android:title="markdown手册" />
+            <item
+                android:id="@+id/signout"
+                android:icon="@mipmap/signout"
+                android:title="注销" />
+        </menu>
+    </item>
+
+</menu>
