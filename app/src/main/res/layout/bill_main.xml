@@ -24,13 +24,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <SearchView
-            android:id="@+id/searchView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            android:layout_marginTop="60dp"
-            android:queryHint="请输入搜索内容(月份)" />
+            android:orientation="horizontal">
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:iconifiedByDefault="false"
+                android:layout_marginTop="60dp"
+                android:queryHint="请输入搜索内容(月份)" />
+            <Button
+                android:id="@+id/Statistic"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="62dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:text="统计"
+                android:background="#f2701a"
+                android:textSize="15sp"/>
+        </LinearLayout>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -39,8 +55,7 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:background="@drawable/blue">
         </ListView>
     </LinearLayout>
 

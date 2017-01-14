@@ -84,10 +84,26 @@ public class BillActivity extends AppCompatActivity {
         //月份spin------------>begin
         List<String> list4month = new ArrayList<String>();
         list4month.add(String.valueOf(i));
-        list4month.add(String.valueOf(i-1));
-        list4month.add(String.valueOf(i-2));
-        list4month.add(String.valueOf(i-3));
-        list4month.add(String.valueOf(i-4));
+        int temp = i-1;
+        if(temp<=0){
+            temp += 12;
+        }
+        list4month.add(String.valueOf(temp));
+        temp = i-2;
+        if(temp<=0){
+            temp += 12;
+        }
+        list4month.add(String.valueOf(temp));
+        temp = i-3;
+        if(temp<=0){
+            temp += 12;
+        }
+        list4month.add(String.valueOf(temp));
+        temp = i-4;
+        if(temp<=0){
+            temp += 12;
+        }
+        list4month.add(String.valueOf(temp));
         ArrayAdapter<String> adapter4month = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list4month);
         adapter4month.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         Spinner sp4month = (Spinner) findViewById(R.id.Spinner4month);

@@ -49,12 +49,14 @@ public class activity_bill extends AppCompatActivity implements NavigationView.O
     private static final String url4delete = "http://101.200.59.74:8080/myservlet/Bill_delete";
     private static final String url4update = "http://101.200.59.74:8080/myservlet/Bill_update";
     private List<Map<String,String>> data;
+    private List<Integer>data4Statistic = new ArrayList<>();
     private static final int UPDATE_CONTENT= 0;
     private static final String id = "0";
     private ListView listview;
     private SimpleAdapter simpleAdapter;
     private SearchView mSearchView;
     private String str4month;
+    private Button Statistic;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill);
@@ -89,10 +91,12 @@ public class activity_bill extends AppCompatActivity implements NavigationView.O
         str4month = formatter.format(curDate);
 
         listview=(ListView) findViewById(R.id.list);
-//        final Button addbutton = (Button) findViewById(R.id.addbutton);
+        listview.getBackground().setAlpha(100);
         mSearchView = (SearchView) findViewById(R.id.searchView);
+        Statistic = (Button) findViewById(R.id.Statistic);
         data = new ArrayList<>();
-
+        data4Statistic.add(0); //总收入
+        data4Statistic.add(0); //总支出
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             // 当点击搜索按钮时触发该方法
             @Override
@@ -141,6 +145,23 @@ public class activity_bill extends AppCompatActivity implements NavigationView.O
             }
         });
 
+        Statistic.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                LayoutInflater factory = LayoutInflater.from(getApplicationContext());
+                View views = factory.inflate(R.layout.dialog4statistic,null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity_bill.this);
+                builder.setView(views);
+                final TextView sta1 = (TextView) views.findViewById(R.id.sta1);
+                final TextView sta2 = (TextView) views.findViewById(R.id.sta2);
+                final TextView sta3 = (TextView) views.findViewById(R.id.sta3);
+                sta1.setText(data4Statistic.get(1)+"");
+                sta2.setText(data4Statistic.get(0)+"");
+                int num = data4Statistic.get(0)-data4Statistic.get(1);
+                sta3.setText(num+"");
+                builder.show();
+            }
+        });
+
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
@@ -173,6 +194,8 @@ public class activity_bill extends AppCompatActivity implements NavigationView.O
                 HttpURLConnection conn = null;
                 DataOutputStream out = null;
                 String response = null;
+                data4Statistic.set(0,0); //总收入
+                data4Statistic.set(1,0); //总支出
                 try{
                     System.out.println("666");
                     URL url = new URL(url4search);
@@ -218,7 +241,7 @@ public class activity_bill extends AppCompatActivity implements NavigationView.O
 
     private List getdatafromstring(String response){
         List<String>list = new ArrayList<>();
-        if(response==null){
+        if(response.equals("")){
             return list;
         }
         String[] str = response.split(";");
@@ -240,12 +263,15 @@ public class activity_bill extends AppCompatActivity implements NavigationView.O
                     List<String> list = (List) message.obj;
                     String[] part;
                     int len = list.size();
+
                     for (int i = 0; i < len; i++) {
                         part = list.get(i).split(",");
                         Map<String, String> map = new LinkedHashMap<>();
                         map.put("day", part[0] + "号");
                         map.put("num", part[1] + part[2]);
+
                         if (part[1].equals("+")) {
+                            data4Statistic.set(0,data4Statistic.get(0) + Integer.parseInt(part[2]));
                             switch (part[3]) {
                                 case "1":
                                     part[3] = "工资";
@@ -267,6 +293,7 @@ public class activity_bill extends AppCompatActivity implements NavigationView.O
                                     break;
                             }
                         } else {
+                            data4Statistic.set(1,data4Statistic.get(1) + Integer.parseInt(part[2]));
                             switch (part[3]) {
                                 case "1":
                                     part[3] = "网络";
